@@ -1,4 +1,34 @@
 # D.hadir
+<?php
+session_start();
+$conn = mysqli_connect("localhost","root","","absensi_sekolah");
+
+$username = $_POST['username'];
+$password = md5($_POST['password']);
+
+$query = mysqli_query($conn,
+    "SELECT * FROM users 
+     WHERE username='$username' 
+     AND password='$password'");
+
+$data = mysqli_fetch_assoc($query);
+
+if($data){
+    $_SESSION['user_id'] = $data['id'];
+    $_SESSION['role'] = $data['role'];
+    header("location:dashboard.php");
+}else{
+    echo "Login gagal";
+}
+?>
+<?php
+session_start();
+if($_SESSION['role']=='guru'){
+    echo "Dashboard Guru";
+}else{
+    echo "Dashboard Siswa";
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
